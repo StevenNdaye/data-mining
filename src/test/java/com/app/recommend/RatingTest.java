@@ -1,3 +1,5 @@
+package com.app.recommend;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +34,7 @@ public class RatingTest {
     public void itShouldGetRatingsWhenGivenAParticularUser(){
         Map<String, Double> data = rating.forUser("user", ratings);
         assertThat(data.get("Phoenix"), is(new Double(5)));
+        assertThat(data, is(ratings.get("user")));
     }
 
 }

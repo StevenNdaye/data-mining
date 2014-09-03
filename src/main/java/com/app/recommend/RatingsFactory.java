@@ -1,3 +1,5 @@
+package com.app.recommend;
+
 import java.util.HashMap;
 import java.util.Map;
 
