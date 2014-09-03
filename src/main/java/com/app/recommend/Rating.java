@@ -7,9 +7,17 @@ import java.util.Map;
  */
 public class Rating {
 
-    private Map<String, Object> usersRatings = new RatingsFactory().createRatings();
-
     public Map<String, Double> forUser(String user, Map<String, Object> ratings) {
         return (Map<String, Double>) ratings.get(user);
+    }
+
+    public double computeManhatanDistance(Map<String, Double> firstRatings, Map<String, Double> secondratings) {
+        double distance = 0;
+        for (String keyValue : firstRatings.keySet()) {
+            if (secondratings.containsKey(keyValue)){
+                distance += Math.abs(firstRatings.get(keyValue) - secondratings.get(keyValue));
+            }
+        }
+        return distance;
     }
 }
