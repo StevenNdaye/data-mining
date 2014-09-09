@@ -13,26 +13,26 @@ public class Rating {
         return (Map<String, Double>) ratings.get(user);
     }
 
-    public double computeManhatanDistance(Map<String, Double> firstRatings, Map<String, Double> secondratings) {
+    //Using the Minkowski Distance Metric
+    public double computeManhattanDistance(Map<String, Double> firstRatings, Map<String, Double> secondRatings) {
         double distance = 0;
         for (String keyValue : firstRatings.keySet()) {
-            if (secondratings.containsKey(keyValue)){
-                distance += Math.abs(firstRatings.get(keyValue) - secondratings.get(keyValue));
+            if (secondRatings.containsKey(keyValue)){
+                distance += Math.abs(firstRatings.get(keyValue) - secondRatings.get(keyValue));
             }
         }
         return distance;
     }
 
+    //Based on the Minkowski Distance Metric, the nearest neighbor(the one whose distance with the user is closer to zero) is computed.
     public Map<Double, String> computeNearestNeighbor(String user, Map<String, Object> userRatings) {
 
         Map<Double, String> neighbors = new HashMap<Double, String>();
 
         for (String username : userRatings.keySet()) {
             if(username != user){
-                Map<String, Double> firstRatings = (Map<String, Double>) userRatings.get(username);
-                Map<String, Double> secondRatings = (Map<String, Double>) userRatings.get(user);
-
-                double distance = computeManhatanDistance(firstRatings, secondRatings);
+                double distance = computeManhattanDistance((Map<String, Double>) userRatings.get(username),
+                        (Map<String, Double>) userRatings.get(user));
                 neighbors.put(distance, username);
             }
         }

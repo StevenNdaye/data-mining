@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -33,26 +32,30 @@ public class RatingTest {
 
     @Test
     public void itShouldComputeManhattanDistanceBetweenTwoRatings(){
-        double manhatanDistance = rating.computeManhatanDistance(factory.createHaileyRating(), factory.createJordynRating());
-        assertThat(manhatanDistance, is(new Double(7.5)));
+        double manhattanDistance = rating.computeManhattanDistance(factory.createHaileyRating(), factory.createJordynRating());
+        assertThat(manhattanDistance, is(new Double(7.5)));
     }
 
     @Test
     public void itShouldComputeNearestNeighbor(){
 
-        Map<Double, String> neighbors = new HashMap<Double, String>(){{
-            put(new Double(2.0), "Veronica");
-            put(new Double(4.0), "Chan");
-            put(new Double(4.0), "Sam");
-            put(new Double(4.5), "Dan");
-            put(new Double(5.0), "Angelica");
-            put(new Double(5.5), "Bill");
-            put(new Double(7.5), "Jordyn");
-        }};
+        Map<Double, String> neighbors = buildNeighbors();
 
         Map<Double, String> data = rating.computeNearestNeighbor("Hailey", factory.createRatings());
         assertThat(data, is(neighbors));
         assertThat(getFirstNeighbor(data), is("Veronica"));
+    }
+
+    private Map<Double, String> buildNeighbors() {
+        return new HashMap<Double, String>(){{
+                put(new Double(2.0), "Veronica");
+                put(new Double(4.0), "Chan");
+                put(new Double(4.0), "Sam");
+                put(new Double(4.5), "Dan");
+                put(new Double(5.0), "Angelica");
+                put(new Double(5.5), "Bill");
+                put(new Double(7.5), "Jordyn");
+            }};
     }
 
     private String getFirstNeighbor(Map<Double, String> data) {
