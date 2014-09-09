@@ -13,7 +13,7 @@ public class Rating {
         return (Map<String, Double>) ratings.get(user);
     }
 
-    //Using the Minkowski Distance Metric
+    //Using the Manhattan Distance Metric
     public double computeManhattanDistance(Map<String, Double> firstRatings, Map<String, Double> secondRatings) {
         double distance = 0;
         for (String keyValue : firstRatings.keySet()) {
@@ -24,7 +24,7 @@ public class Rating {
         return distance;
     }
 
-    //Based on the Minkowski Distance Metric, the nearest neighbor(the one whose distance with the user is closer to zero) is computed.
+    //Based on the Manhattan Distance formula, the nearest neighbor(the one whose distance with the user is closer to zero) is computed.
     public Map<Double, String> computeNearestNeighbor(String user, Map<String, Object> userRatings) {
 
         Map<Double, String> neighbors = new HashMap<Double, String>();
