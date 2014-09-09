@@ -38,12 +38,28 @@ public class RatingTest {
 
     @Test
     public void itShouldComputeNearestNeighbor(){
-
         Map<Double, String> neighbors = buildNeighbors();
-
         Map<Double, String> data = rating.computeNearestNeighbor("Hailey", factory.createRatings());
         assertThat(data, is(neighbors));
         assertThat(getFirstNeighbor(data), is("Veronica"));
+    }
+
+    @Test
+    public void itShouldMakeRecommendationsForUser(){
+        Map<String, Double> data = rating.recommend("Hailey", factory.createRatings());
+        Map<String, Double> recommendations = buildRecommendations();
+
+        assertThat(data, is(recommendations));
+    }
+
+    private Map<String, Double> buildRecommendations() {
+        return new HashMap<String, Double>(){
+            {
+                put("Phoenix", new Double(4.0));
+                put("Blues Traveler", new Double(3.0));
+                put("Slightly Stoopid", new Double(2.5));
+            }
+        };
     }
 
     private Map<Double, String> buildNeighbors() {

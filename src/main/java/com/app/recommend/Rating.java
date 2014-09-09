@@ -42,4 +42,8 @@ public class Rating {
     private Map<Double, String> sortNeighbors(Map<Double, String> neighbors) {
         return new TreeMap<Double, String>(neighbors);
     }
+
+    public Map<String, Double> recommend(String user, Map<String, Object> userRatings) {
+        return null;
+    }
 }
