@@ -52,6 +52,12 @@ public class RatingTest {
         assertThat(data, is(recommendations));
     }
 
+    @Test
+    public void itShouldCalculateAgreementBetweenTwoRatings(){
+        double agreement = rating.calculatePearson(factory.createAngelicaRating(), factory.createBillRating());
+        assertThat(agreement, is(-0.90405349906826993));
+    }
+
     private Map<String, Double> buildRecommendations() {
         return new HashMap<String, Double>(){
             {

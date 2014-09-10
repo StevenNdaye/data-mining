@@ -25,6 +25,7 @@ public class Rating {
     }
 
     //Using the Minkowski Formula where r=2 as it implements Euclidean
+    //Untested right now
     public double computeMinkowskiDistance(Map<String, Double> firstRatings, Map<String, Double> secondRatings, int r){
         double distance = 0;
         boolean commonRatings = false;
@@ -58,10 +59,6 @@ public class Rating {
         return sortNeighbors(neighbors);
     }
 
-    private Map<Double, String> sortNeighbors(Map<Double, String> neighbors) {
-        return new TreeMap<Double, String>(neighbors);
-    }
-
     public Map<String, Double> recommend(String user, Map<String, Object> userRatings) {
 
         Map<String, Double> recommendations = new HashMap<String, Double>();
@@ -79,6 +76,43 @@ public class Rating {
         return sortedRecommendations(recommendations);
     }
 
+    //Implementing Pearson Correlation Coefficient Formula
+    public double calculatePearson(Map<String, Double> firstUser, Map<String, Double> secondUser) {
+
+        double sum_xy = 0, sum_x = 0, sum_y = 0, sum_x2 = 0, sum_y2 = 0;
+        int counter = 0;
+
+        for (String key : firstUser.keySet()) {
+            if(secondUser.containsKey(key)){
+                counter++;
+                double xValue = firstUser.get(key);
+                double yValue = secondUser.get(key);
+                sum_xy += xValue * yValue;
+                sum_x += xValue;
+                sum_y += yValue;
+                sum_x2 += Math.pow(xValue, 2);
+                sum_y2 += Math.pow(yValue, 2);
+            }
+        }
+
+        double denominator = calculatePearsonDenominator(sum_x, sum_y, sum_x2, sum_y2, counter);
+
+        if (denominator == 0){
+            return 0;
+        } else {
+            return (sum_xy-(sum_x * sum_y) / counter) / denominator;
+        }
+    }
+
+    private double calculatePearsonDenominator(double sum_x, double sum_y, double sum_x2, double sum_y2, int counter) {
+        return Math.sqrt(sum_x2 - (Math.pow(sum_x, 2))/counter) *
+                                Math.sqrt(sum_y2 - (Math.pow(sum_y, 2))/counter);
+    }
+
+    private Map<Double, String> sortNeighbors(Map<Double, String> neighbors) {
+        return new TreeMap<Double, String>(neighbors);
+    }
+
     private boolean notRated(Map<String, Double> currentUserRatings, String rating) {
         return !(currentUserRatings.containsKey(rating));
     }
@@ -94,4 +128,5 @@ public class Rating {
     private String getNearestNeighbor(Map<Double, String> nearestNeighbor) {
         return nearestNeighbor.get(nearestNeighbor.keySet().toArray()[0]);
     }
+
 }
