@@ -9,6 +9,7 @@ import java.util.TreeMap;
  */
 public class Rating {
 
+
     public Map<String, Double> forUser(String user, Map<String, Object> ratings) {
         return getUserRatings(ratings, user);
     }
@@ -26,6 +27,7 @@ public class Rating {
 
     //Using the Minkowski Formula where r=2 as it implements Euclidean
     //Untested right now
+    //To use when the data is dense
     public double computeMinkowskiDistance(Map<String, Double> firstRatings, Map<String, Double> secondRatings, int r){
         double distance = 0;
         boolean commonRatings = false;
@@ -45,6 +47,7 @@ public class Rating {
     }
 
     //Based on the Manhattan Distance formula, the nearest neighbor(the one whose distance with the user is closer to zero) is computed.
+    //To use when the data is very dense
     public Map<Double, String> computeNearestNeighbor(String user, Map<String, Object> userRatings) {
 
         Map<Double, String> neighbors = new HashMap<Double, String>();
@@ -76,7 +79,8 @@ public class Rating {
         return sortedRecommendations(recommendations);
     }
 
-    //Implementing Pearson Correlation Coefficient Formula
+    //Implementing Pearson Correlation Coefficient Formula.
+    //To use when the data can easily be inflated, like in a rating system
     public double calculatePearson(Map<String, Double> firstUser, Map<String, Double> secondUser) {
 
         double sum_xy = 0, sum_x = 0, sum_y = 0, sum_x2 = 0, sum_y2 = 0;
@@ -109,6 +113,35 @@ public class Rating {
                                 Math.sqrt(sum_y2 - (Math.pow(sum_y, 2))/counter);
     }
 
+    //Implementation of the cosine similarity
+    //To use when the data is sparse, as not being dense
+    public double calculateCosineSimilarity(Map<String, Double> firstUserRatings, Map<String, Double> secondUserRatings) {
+
+        double dotProduct = 0.0;
+        double sum_x2 = 0;
+        double sum_y2 = 0;
+
+        for (String key : firstUserRatings.keySet()) {
+            dotProduct += calculateDotProduct(firstUserRatings, secondUserRatings, key);
+            sum_x2 += calculateVectorLength(firstUserRatings, key);
+            sum_y2 += calculateVectorLength(secondUserRatings, key);
+        }
+
+        return dotProduct / (Math.sqrt(sum_x2) * Math.sqrt(sum_y2));
+    }
+
+    private double calculateVectorLength(Map<String, Double> firstUserRatings, String key) {
+        return Math.pow(getRatingValue(firstUserRatings, key), 2);
+    }
+
+    private double calculateDotProduct(Map<String, Double> firstUserRatings, Map<String, Double> secondUserRatings, String key) {
+        return getRatingValue(firstUserRatings, key) * getRatingValue(secondUserRatings, key);
+    }
+
+    private double getRatingValue(Map<String, Double> rating, String key) {
+        return rating.containsKey(key) ? rating.get(key) : 0;
+    }
+
     private Map<Double, String> sortNeighbors(Map<Double, String> neighbors) {
         return new TreeMap<Double, String>(neighbors);
     }
@@ -128,5 +161,4 @@ public class Rating {
     private String getNearestNeighbor(Map<Double, String> nearestNeighbor) {
         return nearestNeighbor.get(nearestNeighbor.keySet().toArray()[0]);
     }
-
 }

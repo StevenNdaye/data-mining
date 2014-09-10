@@ -58,6 +58,12 @@ public class RatingTest {
         assertThat(agreement, is(-0.90405349906826993));
     }
 
+    @Test
+    public void itShouldCalculateCosineSimilarity(){
+        double cosineSimilarity = rating.calculateCosineSimilarity(factory.createAngelicaRating(), factory.createVeronicaRating());
+        assertThat(cosineSimilarity, is(0.9246279432210068));
+    }
+
     private Map<String, Double> buildRecommendations() {
         return new HashMap<String, Double>(){
             {
