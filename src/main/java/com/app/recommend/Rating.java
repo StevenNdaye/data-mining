@@ -24,6 +24,25 @@ public class Rating {
         return distance;
     }
 
+    //Using the Minkowski Formula where r=2 as it implements Euclidean
+    public double computeMinkowskiDistance(Map<String, Double> firstRatings, Map<String, Double> secondRatings, int r){
+        double distance = 0;
+        boolean commonRatings = false;
+
+        for (String keyValue : firstRatings.keySet()) {
+            if (secondRatings.containsKey(keyValue)){
+                distance += Math.pow(Math.abs(firstRatings.get(keyValue) - secondRatings.get(keyValue)), r);
+                commonRatings = true;
+            }
+        }
+
+        if (commonRatings) {
+            return Math.pow(distance, r);
+        }
+
+        return 0;
+    }
+
     //Based on the Manhattan Distance formula, the nearest neighbor(the one whose distance with the user is closer to zero) is computed.
     public Map<Double, String> computeNearestNeighbor(String user, Map<String, Object> userRatings) {
 
