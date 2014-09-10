@@ -10,7 +10,7 @@ import java.util.TreeMap;
 public class Rating {
 
     public Map<String, Double> forUser(String user, Map<String, Object> ratings) {
-        return (Map<String, Double>) ratings.get(user);
+        return getUserRatings(ratings, user);
     }
 
     //Using the Manhattan Distance Metric
@@ -31,8 +31,8 @@ public class Rating {
 
         for (String username : userRatings.keySet()) {
             if(username != user){
-                double distance = computeManhattanDistance((Map<String, Double>) userRatings.get(username),
-                        (Map<String, Double>) userRatings.get(user));
+                double distance = computeManhattanDistance(getUserRatings(userRatings, username),
+                        getUserRatings(userRatings, user));
                 neighbors.put(distance, username);
             }
         }
@@ -44,6 +44,35 @@ public class Rating {
     }
 
     public Map<String, Double> recommend(String user, Map<String, Object> userRatings) {
-        return null;
+
+        Map<String, Double> recommendations = new HashMap<String, Double>();
+
+        String nearestNeighbor = getNearestNeighbor(computeNearestNeighbor(user, userRatings));
+
+        Map<String, Double> nearestNeighborRatings = getUserRatings(userRatings, nearestNeighbor);
+        Map<String, Double> currentUserRatings = getUserRatings(userRatings, user);
+
+        for (String rating : nearestNeighborRatings.keySet()) {
+            if(notRated(currentUserRatings, rating)){
+                recommendations.put(rating, nearestNeighborRatings.get(rating));
+            }
+        }
+        return sortedRecommendations(recommendations);
+    }
+
+    private boolean notRated(Map<String, Double> currentUserRatings, String rating) {
+        return !(currentUserRatings.containsKey(rating));
+    }
+
+    private TreeMap<String, Double> sortedRecommendations(Map<String, Double> recommendations) {
+        return new TreeMap<String, Double>(recommendations);
+    }
+
+    private Map<String, Double> getUserRatings(Map<String, Object> userRatings, String nearestNeighbor) {
+        return (Map<String, Double>) userRatings.get(nearestNeighbor);
+    }
+
+    private String getNearestNeighbor(Map<Double, String> nearestNeighbor) {
+        return nearestNeighbor.get(nearestNeighbor.keySet().toArray()[0]);
     }
 }
