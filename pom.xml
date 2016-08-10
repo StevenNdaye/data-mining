@@ -7,6 +7,23 @@
     <groupId>data-mining</groupId>
     <artifactId>data-mining</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>collaborative-filtering</module>
+    </modules>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <contributors>
+        <contributor>
+            <email>stevenndaye@gmail.com</email>
+            <name>Steven Ndaye</name>
+        </contributor>
+    </contributors>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -15,6 +32,20 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
 
 
 </project>
